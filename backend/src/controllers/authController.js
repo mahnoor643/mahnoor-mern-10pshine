@@ -1,0 +1,96 @@
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { body, validationResult } from "express-validator";
+import dotenv from "dotenv";
+import logger from "../utils/logger.js";
+import {
+  findUserByEmail,
+  createUser,
+  getAllUsers,
+  findUserById,
+} from "../models/userModel.js";
+
+dotenv.config();
+
+// VALIDATION RULES
+export const validateSignup = [
+  body("username")
+    .isString()
+    .isLength({ min: 5 })
+    .withMessage("Username must be at least 5 characters long"),
+  body("email").isEmail().withMessage("Invalid email format"),
+  body("password")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long"),
+];
+
+export const validateLogin = [
+  body("email").isEmail().withMessage("Invalid email format"),
+  body("password").notEmpty().withMessage("Password is required"),
+];
+
+// SIGNUP
+export const registerUser = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
+    const { username, email, password } = req.body;
+    const existingUser = await findUserByEmail(email);
+    if (existingUser) {
+      return res.status(409).json({ message: "User with this email already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userId = await createUser(username, email, hashedPassword);
+
+    logger.info(`New user registered: ${email}`);
+    return res.status(201).json({
+      message: "User registered successfully",
+      userId,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// LOGIN
+export const loginUser = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
+    const { email, password } = req.body;
+    const user = await findUserByEmail(email);
+    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) return res.status(400).json({ message: "Invalid credentials" });
+
+    const token = jwt.sign({ id: user.id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    logger.info(`User logged in: ${email}`);
+    res.status(200).json({ message: "Login successful", token });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ADMIN — GET ALL USERS
+export const getAllRegisteredUsers = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const user = await findUserById(userId);
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user.isAdmin)
+      return res.status(403).json({ message: "Not authorized to perform this action" });
+
+    const users = await getAllUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
