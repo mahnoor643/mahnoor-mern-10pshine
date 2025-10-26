@@ -8,6 +8,8 @@
 }
 
 :root {
+  --toastify-color-success: #09585f; /* your theme's primary blue */
+  --toastify-color-error: #ff4d4d;
   --deep-sea-green: #09585f;
   --dark-grey: #d9dade;
   --yellow: #CF9341;
@@ -15,8 +17,14 @@
 }
 
 html, body {
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;   /* covers full viewport */
+  height: auto;         /* allows extension when content grows */
+  width: 100%;
   margin: 0;
   padding: 0;
+}
+
+
+.text-green{
+  color: var(--deep-sea-green);
 }

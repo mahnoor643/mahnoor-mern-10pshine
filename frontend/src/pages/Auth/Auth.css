@@ -2,9 +2,11 @@
 .auth-container {
     display: flex;
     flex-wrap: wrap;
-    height: 100vh;
+    align-items: stretch;
+    min-height: 100vh;
+    height: auto;
     width: 100%;
-    position: relative;
+    /* position: relative; */
 }
 
 /* ---------- Illustration Section ---------- */
@@ -14,6 +16,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-height: 100vh;
+    height: auto;
 }
 
 /* ---------- Branding & Text ---------- */
@@ -46,7 +50,7 @@
 }
 
 /* ---------- Buttons (Login / Signup) ---------- */
-.active-auth {
+.submit-btn {
     display: inline-block;
     background: linear-gradient(135deg, #09585f, #0c7b82);
     color: #fff;
@@ -54,7 +58,7 @@
     padding: 12px 24px;
     border-radius: 12px;
     text-align: center;
-    width: 120px;
+    width: 100%;
     cursor: pointer;
     box-shadow: 0 6px 12px rgba(13, 90, 100, 0.4);
     transition: all 0.3s ease;
@@ -63,20 +67,28 @@
     border: none;
 }
 
-.active-auth:hover {
+.submit-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 18px rgba(13, 90, 100, 0.55);
     color: var(--dark-grey);
 }
 
-.active-auth:active {
+.submit-btn:active {
     transform: scale(0.97);
     box-shadow: 0 4px 8px rgba(13, 90, 100, 0.55);
-        color: var(--dark-grey);
+    color: var(--dark-grey);
 
 }
 
 .inactive-state {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
     box-shadow: 0 8px 18px rgba(13, 90, 100, 0.55);
     transform: translateY(-3px);
     background: transparent;
@@ -84,7 +96,7 @@
     color: var(--deep-sea-green);
 }
 
-.submit-btn {
+/* .submit-btn {
     background-color: var(--deep-sea-green);
     color: white;
     box-shadow: 0 0 6px rgba(26, 166, 183, 0.3);
@@ -93,25 +105,27 @@
     padding: 10px 12px;
     border: none;
     border-radius: 14px;
-}
+} */
 
 .or-divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #6c757d; /* muted gray */
-  margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #6c757d;
+    /* muted gray */
+    margin: 1rem 0;
 }
 
 .or-divider::before,
 .or-divider::after {
-  content: "";
-  flex: 1;
-  border-bottom: 1px solid #d9dade; /* light line */
-  margin: 0 0.75rem;
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #d9dade;
+    /* light line */
+    margin: 0 0.75rem;
 }
 
-.other-auth{
+/* .other-auth{
     box-shadow: 0 8px 18px rgba(13, 90, 100, 0.55);
     transform: translateY(-3px);
     background: transparent;
@@ -125,7 +139,7 @@
 
 .other-auth img{
     height: 28px;
-}
+} */
 /* ---------- Form Inputs ---------- */
 .form-control {
     border: 1.5px solid var(--dark-grey);
@@ -139,7 +153,6 @@
 .form-control:focus {
     border-color: var(--deep-sea-green);
     box-shadow: 0 0 6px rgba(26, 166, 183, 0.3);
-    /* soft aqua glow */
     outline: none;
 }
 
@@ -156,15 +169,16 @@
 }
 
 .icon-sm {
-  width: 22px;
-  height: 42px;
-  object-fit: contain;
+    width: 22px;
+    height: 42px;
+    object-fit: contain;
 }
 
-
-/* =====================================================
-   RESPONSIVE BREAKPOINTS
-   ===================================================== */
+.invalid-feedback {
+    font-size: 11px;
+    color: #d9534f;
+    margin-top: 1px;
+}
 
 /* ---------- MOBILE (max-width: 767px) ---------- */
 @media (max-width: 767px) {
@@ -176,8 +190,7 @@
     }
 
     .illustration-sec {
-        align-items: center;
-        padding: 1.5rem 1rem;
+        display: none !important;
     }
 
     /* Hide globe on mobile */
@@ -185,8 +198,19 @@
         display: none !important;
     }
 
+    .mobile-title {
+        font-size: 50px;
+    }
+
     .text-left {
         padding-left: 0;
+    }
+
+    .auth-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
     }
 
     .brand {
@@ -266,7 +290,7 @@
         font-size: 1.4rem;
     }
 
-    
+
     .text-left {
         padding-left: 20px;
     }
@@ -336,5 +360,55 @@
 
     .text-left {
         padding-left: 60px;
+    }
+}
+
+
+/* forgot pwd UI */
+
+/* Overlay background */
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1055;
+    backdrop-filter: blur(2px);
+}
+
+/* Main modal container */
+.custom-modal-container {
+    width: 90%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Make it fullscreen on mobile */
+@media (max-width: 576px) {
+    form {
+        max-width: 100% !important;
+        padding: 1rem !important;
+    }
+
+    .submit-btn,
+    .inactive-state {
+        width: 100%;
+    }
+
+    input.form-control {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.75rem;
+    }
+
+    .invalid-feedback {
+        max-width: 95%;
     }
 }
