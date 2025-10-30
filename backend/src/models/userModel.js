@@ -5,10 +5,10 @@ export const findUserByEmail = async (email) => {
   return rows[0];
 };
 
-export const createUser = async (username, email, hashedPassword) => {
+export const createUser = async (username, email, hashedPassword, profileImage) => {
   const [result] = await pool.query(
-    "INSERT INTO users (username, email, password, isAdmin) VALUES (?, ?, ?, ?)",
-    [username, email, hashedPassword, false]
+    "INSERT INTO users (username, email, password, isAdmin, profile_image) VALUES (?, ?, ?, ?, ?)",
+    [username, email, hashedPassword, false, profileImage]
   );
   return result.insertId;
 };

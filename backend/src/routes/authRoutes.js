@@ -7,10 +7,11 @@ import {
   validateLogin,
 } from "../controllers/authController.js";
 import { authenticateToken } from "../middlewares/authMiddleware.js";
+import upload from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 
-router.post("/signup", validateSignup, registerUser);
+router.post("/signup", upload.single("profileImage"), validateSignup, registerUser);
 router.post("/login", validateLogin, loginUser);
 router.get("/getall", authenticateToken, getAllRegisteredUsers);
 

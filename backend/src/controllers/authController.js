@@ -40,14 +40,19 @@ export const registerUser = async (req, res, next) => {
     if (existingUser) {
       return res.status(409).json({ message: "User with this email already exists" });
     }
+    console.log("📸 Uploaded file:", req.file); // <--- ADD THIS LINE
+    console.log("📩 Body:", req.body);
+    // get uploaded image filename (if any)
+    const profileImage = req.file ? req.file.filename : null;
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userId = await createUser(username, email, hashedPassword);
+    const userId = await createUser(username, email, hashedPassword, profileImage);
 
     logger.info(`New user registered: ${email}`);
     return res.status(201).json({
       message: "User registered successfully",
       userId,
+      profileImage: profileImage ? `/uploads/${profileImage}` : null,
     });
   } catch (error) {
     next(error);
@@ -59,7 +64,7 @@ export const loginUser = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-
+    console.log("📩 Login Request Body:", req.body);
     const { email, password } = req.body;
     const user = await findUserByEmail(email);
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
