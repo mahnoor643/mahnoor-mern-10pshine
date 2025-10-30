@@ -22,9 +22,67 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
+  background-color: #8a8a8d;
 }
 
 
 .text-green{
   color: var(--deep-sea-green);
+}
+
+.text-grey{
+  color: #8a8a8d;
+}
+
+.bg-green{
+  background-color: var(--deep-sea-green);
+}
+
+.nav-link-green{
+        color: var(--deep-sea-green);
+        text-decoration: none;
+}
+
+/* Sidebar */
+.active-link {
+  background-color: #0a5c4e57;
+  border-left: 4px solid #0a5c4f;
+  color: #0a5c4f !important;
+  border-radius: 6px;
+  padding: 8px;
+        margin: 2px;
+}
+
+.active-link i {
+  color: #0a5c4f !important;
+}
+
+/* ---------- Buttons (Login / Signup) ---------- */
+.green-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #09585f, #0c7b82);
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(13, 90, 100, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+.green-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(13, 90, 100, 0.55);
+    color: var(--dark-grey);
+}
+
+.green-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 4px 8px rgba(13, 90, 100, 0.55);
+    color: var(--dark-grey);
 }

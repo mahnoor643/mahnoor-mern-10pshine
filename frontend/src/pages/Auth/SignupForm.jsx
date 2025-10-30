@@ -133,7 +133,7 @@ setSignupFile(file); // ✅ THIS IS REQUIRED
             <div className="d-flex justify-content-center">
                 <button
                     type="submit"
-                    className="submit-btn fw-semibold"
+                    className="green-btn fw-semibold"
                     style={{ fontSize: "0.9rem" }}
                 >
                     Create Account

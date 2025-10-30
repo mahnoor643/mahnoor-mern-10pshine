@@ -49,36 +49,7 @@
     transition: all 0.3s ease;
 }
 
-/* ---------- Buttons (Login / Signup) ---------- */
-.submit-btn {
-    display: inline-block;
-    background: linear-gradient(135deg, #09585f, #0c7b82);
-    color: #fff;
-    font-weight: 600;
-    padding: 12px 24px;
-    border-radius: 12px;
-    text-align: center;
-    width: 100%;
-    cursor: pointer;
-    box-shadow: 0 6px 12px rgba(13, 90, 100, 0.4);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    border: none;
-}
 
-.submit-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 18px rgba(13, 90, 100, 0.55);
-    color: var(--dark-grey);
-}
-
-.submit-btn:active {
-    transform: scale(0.97);
-    box-shadow: 0 4px 8px rgba(13, 90, 100, 0.55);
-    color: var(--dark-grey);
-
-}
 
 .inactive-state {
     display: inline-block;
@@ -398,7 +369,7 @@
         padding: 1rem !important;
     }
 
-    .submit-btn,
+    .green-btn,
     .inactive-state {
         width: 100%;
     }

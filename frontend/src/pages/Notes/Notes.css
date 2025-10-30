@@ -1,0 +1,46 @@
+.note-card {
+  border-radius: 14px;
+  transition: all 0.25s ease;
+  background-color: #fff;
+}
+
+.note-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+/* Title */
+.note-title {
+  font-size: 1.05rem;
+  color: #212529;
+}
+
+/* Tags */
+.note-tag {
+  background-color: #f1f3f5;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+/* Content preview (3-line limit) */
+.note-preview {
+  font-size: 0.92rem;
+  color: #555;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-height: 1.5;
+  min-height: 4.5em;
+}
+
+/* Footer */
+.note-footer {
+  font-size: 0.8rem;
+  color: #6c757d;
+}

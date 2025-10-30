@@ -216,7 +216,7 @@ const Auth = () => {
                 </div>
 
                 {/* Login / Signup Section */}
-                <div className="auth-section col-12 col-md-6 d-flex flex-column justify-content-center align-items-center p-4">
+                <div className="auth-section col-12 col-md-6 bg-light d-flex flex-column justify-content-center align-items-center p-4">
                     <div className="auth-box w-100 px-4 px-md-5 py-3">
 
 
