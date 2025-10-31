@@ -18,7 +18,7 @@ export const getAllUsers = async () => {
   return rows;
 };
 
-export const findUserById = async (id) => {
-  const [rows] = await pool.query("SELECT * FROM users WHERE id = ?", [id]);
+export const findUserById = async (userID) => {
+  const [rows] = await pool.query("SELECT * FROM users WHERE userID = ?", [userID]);
   return rows[0];
 };

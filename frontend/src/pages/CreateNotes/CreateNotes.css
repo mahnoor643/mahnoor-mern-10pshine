@@ -1,0 +1,93 @@
+.save-note-btn{
+    display: inline-block;
+    background: linear-gradient(135deg, #09585f, #0c7b82);
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(13, 90, 100, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+.save-note-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(13, 90, 100, 0.55);
+    color: var(--dark-grey);
+}
+
+.save-note-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 4px 8px rgba(13, 90, 100, 0.55);
+    color: var(--dark-grey);
+
+}
+
+.export-pdf-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    font-weight: 700;
+    overflow: hidden;
+    box-shadow: 0 8px 18px rgba(13, 90, 100, 0.55);
+    transform: translateY(-3px);
+    background: transparent;
+    border: var(--dark-grey) solid 1px;
+    color: var(--deep-sea-green);
+}
+
+.clear-btn{
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    font-weight: 700;
+    background-color: rgb(229, 217, 217);
+    box-shadow: 0 8px 18px rgba(13, 90, 100, 0.55);
+    transform: translateY(-3px);
+    border: none;
+    color: var(--deep-sea-green);
+}
+
+.clear-btn:hover{
+    border: var(--deep-sea-green) solid 1px;
+    color: var(--deep-sea-green);
+        background-color: rgb(198, 187, 187);
+}
+
+/* Active (clicked) state */
+.active-icon-btn {
+  background: linear-gradient(135deg, #09585f, #0c7b82);
+  color: #fff !important;
+  border: none;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(9, 88, 95, 0.3);
+}
+
+.select__control {
+  border-radius: 10px !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.select__multi-value {
+  background-color: #e6f4f1 !important;
+  color: #09585f !important;
+}
+
+.select__multi-value__label {
+  color: #09585f !important;
+}
+
+.select__multi-value__remove:hover {
+  background-color: #d1ece8 !important;
+}

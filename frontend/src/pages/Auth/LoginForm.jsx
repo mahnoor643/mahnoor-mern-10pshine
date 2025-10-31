@@ -76,7 +76,7 @@ const loginForm = ({
                                 <div className="d-flex justify-content-center mb-3">
                                     <button
                                         type="submit"
-                                        className="submit-btn fw-semibold"
+                                        className="green-btn fw-semibold"
                                         style={{ fontSize: "0.9rem" }}
                                     >
                                         Log in
