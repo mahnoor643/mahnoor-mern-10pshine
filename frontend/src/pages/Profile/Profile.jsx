@@ -113,7 +113,7 @@ const Profile = () => {
                                                 height="100"
                                             />
                                             <div className="mt-2">
-                                                <label className="btn btn-sm btn-outline-primary">
+                                                <label className="custom-cancel-btn w-50">
                                                     <i className="bi bi-upload me-1"></i> Change Photo
                                                     <input
                                                         type="file"

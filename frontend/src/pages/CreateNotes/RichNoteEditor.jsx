@@ -1,6 +1,7 @@
 import React, { useRef, useState, useMemo } from "react";
 import JoditEditor from "jodit-react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Select from "react-select";
 import "jodit/es2021/jodit.min.css";
 import html2pdf from "html2pdf.js";
 
@@ -9,6 +10,24 @@ const AdvancedNoteEditor = () => {
   const editorRef = useRef(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+
+    // Example tag options
+  const tagOptions = [
+    { value: "work", label: "Work" },
+    { value: "personal", label: "Personal" },
+    { value: "important", label: "Important" },
+    { value: "ideas", label: "Ideas" },
+    { value: "secret", label: "Secret" },
+  ];
+
+    const handleSave = () => {
+    console.log({
+      title,
+      content,
+      tags: selectedTags.map(tag => tag.value),
+    });
+  };
   // changed: keep multiple active buttons as independent toggles
   const [activeBtns, setActiveBtns] = useState({
     pin: false,
@@ -164,6 +183,21 @@ const exportToPDF = () => {
           />
         </div>
 
+        {/* Tag selector */}
+      <div className="mb-3">
+        <label className="form-label fw-semibold text-secondary">Tags:</label>
+        <Select
+          isMulti
+          name="tags"
+          options={tagOptions}
+          className="basic-multi-select"
+          classNamePrefix="select"
+          placeholder="Select or type tags..."
+          value={selectedTags}
+          onChange={setSelectedTags}
+        />
+      </div>
+
         {/* 📝 Jodit Editor */}
         <JoditEditor
           ref={editorRef}
@@ -192,11 +226,7 @@ const exportToPDF = () => {
           </button>
           <button
             className="save-note-btn"
-            onClick={() => {
-              console.log("Title:", title);
-              console.log("Content:", content);
-              alert("✅ Note saved! Check console for details.");
-            }}
+            onClick={handleSave}
           >
             Save Note
           </button>

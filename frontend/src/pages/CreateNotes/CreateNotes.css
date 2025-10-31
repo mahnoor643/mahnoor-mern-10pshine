@@ -73,3 +73,21 @@
   transform: scale(1.1);
   box-shadow: 0 0 10px rgba(9, 88, 95, 0.3);
 }
+
+.select__control {
+  border-radius: 10px !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.select__multi-value {
+  background-color: #e6f4f1 !important;
+  color: #09585f !important;
+}
+
+.select__multi-value__label {
+  color: #09585f !important;
+}
+
+.select__multi-value__remove:hover {
+  background-color: #d1ece8 !important;
+}

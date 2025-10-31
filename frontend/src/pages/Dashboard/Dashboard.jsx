@@ -2,8 +2,10 @@ import React from 'react'
 import "../Dashboard/Dashboard.css"
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     return (
         <>
             <Navbar />
@@ -22,7 +24,9 @@ const Dashboard = () => {
                                         Your personal space to create, lock, and organize notes.
                                     </p>
                                 </div>
-                                <button className="btn green-btn w-25 d-flex align-items-center gap-2 mt-3 mt-sm-0">
+                                <button onClick={()=>{
+                                    navigate("/create");
+                                }} className="btn green-btn w-25 d-flex align-items-center gap-2 mt-3 mt-sm-0">
                                     <i className="bi bi-plus-lg"></i> Create New Note
                                 </button>
                             </div>
