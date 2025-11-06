@@ -7,6 +7,7 @@ import {
   findUserByEmail,
   createUser,
   getAllUsers,
+  updateUser,
   findUserById,
 } from "../models/userModel.js";
 
@@ -95,6 +96,64 @@ export const getAllRegisteredUsers = async (req, res, next) => {
 
     const users = await getAllUsers();
     res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// UPDATE PROFILE
+export const updateUserProfile = async (req, res, next) => {
+  try {
+    const userId = req.user.userID; // ✅ from JWT payload
+    const { username, email, password } = req.body;
+    const profileImage = req.file ? req.file.filename : null;
+
+    // find current user
+    const user = await findUserById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // update password only if provided
+    let hashedPassword = user.password;
+    if (password && password.trim() !== "") {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    // keep old image if not updated
+    const finalProfileImage = profileImage || user.profile_image;
+
+    // update in DB
+    await updateUser(
+      userId,
+      username || user.username,
+      email || user.email,
+      hashedPassword,
+      finalProfileImage
+    );
+
+    logger.info(`User updated profile: ${email || user.email}`);
+    res.status(200).json({
+      message: "Profile updated successfully",
+      profileImage: finalProfileImage ? `/uploads/${finalProfileImage}` : null,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get current logged-in user
+export const getCurrentUser = async (req, res, next) => {
+  try {
+    const userId = req.user.userID; // from JWT payload
+    const user = await findUserById(userId);
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json({
+      userID: user.userID,
+      username: user.username,
+      email: user.email,
+      profileImage: user.profile_image ? `/uploads/${user.profile_image}` : null,
+    });
   } catch (error) {
     next(error);
   }

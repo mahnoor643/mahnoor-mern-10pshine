@@ -14,7 +14,6 @@ const Auth = () => {
     const navigate = useNavigate();
     const [showForgotModal, setShowForgotModal] = useState(false);
     const [SignupFile, setSignupFile] = useState();
-
     const [state, setState] = useState("login");
 
     // login form states
@@ -41,7 +40,6 @@ const Auth = () => {
             formErrors.email = "Please enter a valid email address.";
         }
 
-
         // Password validation (8 chars, 1 uppercase, 1 special)
         const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
         if (!loginPassword.trim()) {
@@ -50,12 +48,10 @@ const Auth = () => {
             formErrors.password = "Password must be at least 8 characters long, include one uppercase letter and one symbol.";
         }
 
-
         setloginErrors(formErrors);
 
-        return Object.keys(formErrors).length === 0; // returns true if no error
+        return Object.keys(formErrors).length === 0;
     };
-
 
     //Validate Signup
     const validateSignup = () => {
@@ -95,6 +91,12 @@ const Auth = () => {
     // handle login submit
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // ✅ Step 1: Validate form before submit
+
+    if (!validateForm()) {
+        console.log("⚠️ Validation failed. Please correct the errors.");
+        return; 
+    }
 
         try {
             const res = await axios.post("http://localhost:5000/api/auth/login", {
@@ -102,7 +104,7 @@ const Auth = () => {
                 password: loginPassword,
             });
 
-            console.log("✅ Login Successful:", res.data);
+            // console.log("✅ Login Successful:", res.data);
             // Save token in localStorage
             localStorage.setItem("token", res.data.token);
             toast.success("Login successful!", {
@@ -141,7 +143,7 @@ const Auth = () => {
                 formData.append("password", signupPassword);
                 formData.append("profileImage", SignupFile);
 
-                console.log("🧾 SignupFile before sending:", SignupFile);
+                // console.log("🧾 SignupFile before sending:", SignupFile);
 
 
                 const res = await axios.post(

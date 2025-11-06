@@ -1,53 +1,98 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import UnlockModal from "./UnlockModal"; 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import UnlockModal from "./UnlockModal";
+import NoteViewModal from "./NoteViewModal";
 
-const SecretNoteCard = ({ 
-  title = "Confidential note...", 
-  created = "Oct 18, 2025, 07:30 AM", 
-  updated = "Oct 19, 2025, 05:00 PM", 
-  onEdit, 
-  onDelete 
+const SecretNoteCard = ({
+  id,
+  title = "Confidential note...",
+  content = "<p>Hidden content...</p>",
+  tags = [],
+  created,
+  updated,
+  passwordHash,
+  archived,
+  pinned,
+  onEdit,
+  onDelete,
+  onArchive,
+  onUnarchive,
+  onPin,
 }) => {
-  const [showUnlock, setShowUnlock] = useState(false);
+  const [fullNote, setFullNote] = useState(null);
 
-  const handleUnlock = (password) => {
-    if (password === "12345") { // demo password logic
-      alert(`✅ Note "${title}" unlocked!`);
-      setShowUnlock(false);
-    } else {
-      alert("❌ Incorrect password!");
+  const [showUnlock, setShowUnlock] = useState(false);
+  const [showNoteView, setShowNoteView] = useState(false);
+
+  // ✅ Local states to track icon state correctly
+  const [isArchived, setIsArchived] = useState(archived);
+  const [isPinned, setIsPinned] = useState(pinned);
+
+  const handleUnlock = async (password) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(`http://localhost:5000/api/notes/unlock/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json(); // ✅ get unlocked note data
+        console.log("🔍 Unlock API Response:", data);
+        setFullNote({
+          id: data.note.id,
+          title: data.note.title || "Confidential note...",
+          content: data.note.note || "<p>No content</p>",
+          created: data.note.created_at ? new Date(data.note.created_at).toLocaleString() : "Unknown",
+          updated: data.note.updated_at ? new Date(data.note.updated_at).toLocaleString() : "Unknown",
+          archived: data.note.archived,
+          pinned: data.note.pinned,
+        });
+
+        setShowUnlock(false);
+        setShowNoteView(true);
+      } else if (response.status === 401) {
+        toast.error("Unauthorized: Please log in again.", toastStyle);
+      } else {
+        toast.error("Incorrect password!", toastStyle);
+      }
+    } catch (err) {
+      console.error("Unlock error:", err);
     }
+  };
+
+  const toastStyle = {
+    position: "top-center",
+    autoClose: 2500,
+    style: { background: "#09585f", color: "#fff", borderRadius: "10px" },
   };
 
   return (
     <>
-      {/* 📝 Note Card */}
+      {/* 🔒 Locked Card */}
       <div className="card note-card p-3 h-100">
-        {/* Header */}
         <div className="note-header mb-2 d-flex justify-content-between align-items-center">
-          <span className="note-title text-truncate">{title}</span>
-          <div className="d-flex align-items-center gap-2">
-            <i className="bi bi-lock"></i>
-            <i
-              className="bi bi-pencil text-warning cursor-pointer"
-              onClick={onEdit}
-              title="Edit Note"
-              role="button"
-            ></i>
-            <i
-              className="bi bi-trash text-danger cursor-pointer"
-              onClick={onDelete}
-              title="Delete Note"
-              role="button"
-            ></i>
-          </div>
+          <span className="note-title text-truncate fw-semibold">{title}</span>
         </div>
 
-        {/* Secret Box */}
-        <div className="secret-box mb-3">
-          Secret note - unlock to view
+
+        <div className="d-flex flex-wrap gap-1 mb-2">
+          {/* 🏷️ Tags */}
+          {tags.map((tag, index) => (
+            <span key={index} className="badge note-tag">
+              {tag}
+            </span>
+          ))}
+        </div>
+        <div className="secret-box mb-3 text-muted">
+          Secret note – unlock to view
           <button
             className="unlock-btn float-end"
             onClick={() => setShowUnlock(true)}
@@ -56,7 +101,8 @@ const SecretNoteCard = ({
           </button>
         </div>
 
-        {/* Footer */}
+
+
         <div className="note-footer small text-muted">
           Created: {created}
           <br />
@@ -70,6 +116,23 @@ const SecretNoteCard = ({
         onClose={() => setShowUnlock(false)}
         onUnlock={handleUnlock}
       />
+
+      {/* 📝 Note View Modal */}
+      {fullNote && (
+        <NoteViewModal
+          show={showNoteView}
+          onClose={() => setShowNoteView(false)}
+          note={fullNote}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onArchive={() => onArchive(id, fullNote.archived === 1)}
+          onUnarchive={() => onUnarchive(id, fullNote.archived === 1)}
+          onPin={() => onPin(id, fullNote.pinned === 1)}
+        />
+      )}
+
+
+      <ToastContainer />
     </>
   );
 };

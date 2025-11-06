@@ -22,3 +22,12 @@ export const findUserById = async (userID) => {
   const [rows] = await pool.query("SELECT * FROM users WHERE userID = ?", [userID]);
   return rows[0];
 };
+
+export const updateUser = async (userID, username, email, password, profileImage) => {
+  const query = `
+    UPDATE users 
+    SET username = ?, email = ?, password = ?, profile_image = ?
+    WHERE userID = ?
+  `;
+  await pool.query(query, [username, email, password, profileImage, userID]);
+};
