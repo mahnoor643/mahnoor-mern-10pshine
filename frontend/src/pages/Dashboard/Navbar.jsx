@@ -67,7 +67,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm" id="navbar">
       <div className="container-fluid">
         <h1 className="navbar-brand d-flex justify-content-center align-items-center m-0 ms-2 text-green fw-bold">
           <img src="/Images/Logo.png" className="logo" alt="Logo" />

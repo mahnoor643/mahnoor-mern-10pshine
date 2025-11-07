@@ -39,7 +39,7 @@ const Sidebar = () => {
       {/* 🌿 Desktop Sidebar */}
       <aside
         className="col-lg-2 d-none d-lg-flex flex-column bg-light sidebar p-3 border-end"
-        style={{ minHeight: "calc(100vh - 75px)" }}
+        style={{ minHeight: "calc(100vh - 75px)" }} id="sidebar"
       >
         <ul className="nav flex-column mb-3">
           <li>

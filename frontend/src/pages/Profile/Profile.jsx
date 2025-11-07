@@ -232,10 +232,11 @@ useEffect(() => {
                       </div>
 
                       <div className="mb-3 position-relative">
-                        <label className="form-label">Password</label>
+                        <label className="form-label" htmlFor="password">Password</label>
                         <input
                           type={showPassword ? "text" : "password"}
                           className="form-control"
+                          data-testid="new-pwd"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                         />
