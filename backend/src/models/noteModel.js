@@ -43,3 +43,13 @@ export const deleteNote = async (noteId, userId) => {
   ]);
   return result.affectedRows > 0;
 };
+
+// GET NOTE BY ID
+export const getNoteByIdModel = async (noteId, userId) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM notes WHERE id = ? AND user_id = ?",
+    [noteId, userId]
+  );
+  return rows.length > 0 ? rows[0] : null;
+};
+

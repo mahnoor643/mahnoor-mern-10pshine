@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const SignupForm = ({
     signupName,
@@ -13,8 +13,9 @@ const SignupForm = ({
     handleSignupSubmit,
     handleStateChange
 }) => {
-    return (
+      const [showPassword, setShowPassword] = useState(false);
 
+    return (
         <form id="signupForm" className="mx-auto position-absolute w-100"
             style={{ maxWidth: "350px" }}
             onSubmit={handleSignupSubmit}>
@@ -63,73 +64,87 @@ const SignupForm = ({
             </div>
 
             {/* Profile Picture */}
-<div className="mb-3">
-  <input
-    type="file"
-    accept="image/*"
-    className={`form-control text-center text-md-start py-2 ${signupErrors.file ? "is-invalid" : ""}`}
-    onChange={(e) => {
-      const file = e.target.files[0];
-      if (file) {
-        // validate file type
-        const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/gif"];
-        if (!validTypes.includes(file.type)) {
-          setSignupErrors((prev) => ({
-            ...prev,
-            file: "Only image files (JPG, PNG, GIF) are allowed.",
-          }));
-          e.target.value = ""; // reset the input
-          return;
-        }
-
-        // validate file size (e.g., max 2MB)
-        const maxSize = 2 * 1024 * 1024; // 2MB
-        if (file.size > maxSize) {
-  setSignupErrors((prev) => ({
-    ...prev,
-    file: "File size should not exceed 2MB.",
-  }));
-  e.target.value = "";
-  return;
-}
-
-// if valid
-setSignupErrors((prev) => ({ ...prev, file: "" }));
-setSignupFile(file); // ✅ THIS IS REQUIRED
-      } else {
-        setSignupErrors((prev) => ({ ...prev, file: "Please select a file." }));
-      }
-    }}
-  />
-  {signupErrors.file && (
-    <div className="invalid-feedback text-start text-small">
-      {signupErrors.file}
-    </div>
-  )}
-</div>
-
-
-            {/* Password */}
             <div className="mb-3">
                 <input
-                    type="password"
-                    placeholder="Password"
-                    className={`form-control text-center text-md-start py-2 ${signupErrors.password ? "is-invalid" : ""
-                        }`}
-                    value={signupPassword}
+                    type="file"
+                    accept="image/*"
+                    className={`form-control text-center text-md-start py-2 ${signupErrors.file ? "is-invalid" : ""}`}
                     onChange={(e) => {
-                        setSignupPassword(e.target.value)
-                        // remove pwd error while typing
-                        if (signupErrors.password) {
-                            setSignupErrors((prev) => ({ ...prev, password: "" }));
+                        const file = e.target.files[0];
+                        if (file) {
+                            // validate file type
+                            const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/gif"];
+                            if (!validTypes.includes(file.type)) {
+                                setSignupErrors((prev) => ({
+                                    ...prev,
+                                    file: "Only image files (JPG, PNG, GIF) are allowed.",
+                                }));
+                                e.target.value = ""; // reset the input
+                                return;
+                            }
+
+                            // validate file size (e.g., max 2MB)
+                            const maxSize = 2 * 1024 * 1024; // 2MB
+                            if (file.size > maxSize) {
+                                setSignupErrors((prev) => ({
+                                    ...prev,
+                                    file: "File size should not exceed 2MB.",
+                                }));
+                                e.target.value = "";
+                                return;
+                            }
+
+                            // if valid
+                            setSignupErrors((prev) => ({ ...prev, file: "" }));
+                            setSignupFile(file); // ✅ THIS IS REQUIRED
+                        } else {
+                            setSignupErrors((prev) => ({ ...prev, file: "Please select a file." }));
                         }
                     }}
-
                 />
-                {signupErrors.password && (
-                    <div className="invalid-feedback text-start text-small">{signupErrors.password}</div>
+                {signupErrors.file && (
+                    <div className="invalid-feedback text-start text-small">
+                        {signupErrors.file}
+                    </div>
                 )}
             </div>
+
+            {/* Password */}
+      <div className="mb-3 position-relative">
+        <input
+          type={showPassword ? "text" : "password"}
+          placeholder="Password"
+          className={`form-control text-center text-md-start py-2 ${signupErrors.password ? "is-invalid" : ""}`}
+          value={signupPassword}
+          onChange={(e) => {
+            setSignupPassword(e.target.value);
+            if (signupErrors.password) {
+              setSignupErrors((prev) => ({ ...prev, password: "" }));
+            }
+          }}
+        />
+
+        {/* 👁️ Eye Toggle Icon */}
+        <i
+          className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"} position-absolute`}
+          onClick={() => setShowPassword(!showPassword)}
+          style={{
+            top: "50%",
+            right: "12px",
+            transform: "translateY(-50%)",
+            cursor: "pointer",
+            color: "#6c757d",
+          }}
+          title={showPassword ? "Hide password" : "Show password"}
+        ></i>
+
+        {signupErrors.password && (
+          <div className="invalid-feedback text-start text-small">
+            {signupErrors.password}
+          </div>
+        )}
+      </div>
+
             <div className="d-flex justify-content-center">
                 <button
                     type="submit"

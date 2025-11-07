@@ -1,13 +1,23 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UnlockModal = ({ show, onClose, onUnlock }) => {
   const [password, setPassword] = useState("");
 
   const handleUnlock = () => {
     if (password.trim() === "") {
-      alert("⚠️ Please enter your password.");
+      toast.error("Please enter your password.", {
+                              position: "top-center",
+                              autoClose: 2500,
+                              style: {
+                                  background: "#09585f",
+                                  color: "#fff",
+                                  borderRadius: "10px",
+                              },
+                          });
       return;
     }
     onUnlock(password);
@@ -61,6 +71,7 @@ const UnlockModal = ({ show, onClose, onUnlock }) => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
