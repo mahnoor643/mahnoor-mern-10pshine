@@ -8,12 +8,15 @@ import Navbar from "../Dashboard/Navbar";
 import "./Locked.css"
 import SecretNoteCard from "../Locked/SecretNoteCard";
 import AdvancedNoteEditor from "../CreateNotes/RichNoteEditor";
+import useNoteActions from "../../hooks/useNoteActions";
+
 
 const Locked = () => {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedNote, setSelectedNote] = useState(null);
   const token = localStorage.getItem("token");
+
+
 
   // 🟢 Fetch only locked notes
   const fetchLockedNotes = async () => {
@@ -41,139 +44,9 @@ const Locked = () => {
     fetchLockedNotes();
   }, []);
 
-  // ✏️ Edit Note Modal
-  const handleEdit = (note) => {
-    setSelectedNote(note);
-    const modalElement = document.getElementById("editModal");
-    if (modalElement) {
-      const modal = new bootstrap.Modal(modalElement);
-      modal.show();
-    }
-  };
-
-  // 📌 Pin / Unpin Note
-  const handlePin = async (noteId, pinned) => {
-    try {
-      setNotes(prevNotes =>
-        prevNotes.map(note =>
-          note.id === noteId ? { ...note, pinned: pinned ? 0 : 1 } : note
-        )
-      );
-
-      const response = await fetch(`http://localhost:5000/api/notes/update/${noteId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ pinned: !pinned }),
-      });
-
-      if (!response.ok) {
-        const err = await response.json();
-        console.error("Pin update failed:", err.message);
-        toast.error("Failed to update pin!", {
-          position: "top-center",
-          autoClose: 2500,
-          style: { background: "#09585f", color: "#fff", borderRadius: "10px" },
-        });
-        // Revert UI
-        setNotes(prevNotes =>
-          prevNotes.map(note =>
-            note.id === noteId ? { ...note, pinned: pinned ? 1 : 0 } : note
-          )
-        );
-      }
-    } catch (error) {
-      console.error("Error updating pin:", error);
-    }
-  };
-
-  // 🗃️ Archive / Unarchive
-  const handleArchive = async (noteId, archived) => {
-    try {
-      setNotes(prevNotes =>
-        prevNotes.map(note =>
-          note.id === noteId ? { ...note, archived: archived ? 0 : 1 } : note
-        )
-      );
-
-      const response = await fetch(`http://localhost:5000/api/notes/update/${noteId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ archived: !archived }),
-      });
-
-      if (!response.ok) {
-        const err = await response.json();
-        console.error("Archive update failed:", err.message);
-        toast.error("Failed to update archive state!", {
-          position: "top-center",
-          autoClose: 2500,
-          style: { background: "#09585f", color: "#fff", borderRadius: "10px" },
-        });
-        // Revert UI
-        setNotes(prevNotes =>
-          prevNotes.map(note =>
-            note.id === noteId ? { ...note, archived: archived ? 1 : 0 } : note
-          )
-        );
-      }
-    } catch (error) {
-      console.error("Error updating archive:", error);
-    }
-  };
-
-  // 🗑️ Delete Note
-  const handleDelete = async (noteId) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "This note will be permanently deleted.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#09585f",
-      confirmButtonText: "Yes, delete it!",
-    });
-
-    if (!result.isConfirmed) return;
-
-    try {
-      const response = await fetch(`http://localhost:5000/api/notes/delete/${noteId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.ok) {
-        Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          text: "Your note has been deleted successfully.",
-          timer: 1500,
-          showConfirmButton: false,
-        });
-        setNotes(prev => prev.filter(note => note.id !== noteId));
-      } else {
-        const err = await response.json();
-        Swal.fire({
-          icon: "error",
-          title: "Failed!",
-          text: err.message || "Could not delete the note.",
-        });
-      }
-    } catch (error) {
-      console.error("Error deleting note:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: "Something went wrong while deleting the note.",
-      });
-    }
-  };
-
+    const { selectedNote, handleEdit, handlePin, handleArchive, handleDelete } =
+  useNoteActions(token, setNotes, fetchLockedNotes);
+  
   if (loading) return <p className="text-center mt-5">Loading locked notes...</p>;
 
   return (
